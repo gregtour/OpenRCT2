@@ -188,8 +188,8 @@ enum {
 	TRACK_HALF_LOOP = 18,
 	TRACK_CORKSCREW = 19,
 	TRACK_TOWER_BASE = 20,
-	TRACK_HELIX_SMALL= 21,
-	TRACK_HELIX_LARGE= 22,
+	TRACK_HELIX_SMALL = 21,
+	TRACK_HELIX_LARGE = 22,
 	TRACK_HELIX_LARGE_UNBANKED = 23, 
 	TRACK_BRAKES = 24,
 	TRACK_ON_RIDE_PHOTO = 26,
@@ -444,5 +444,8 @@ void game_command_place_track(int* eax, int* ebx, int* ecx, int* edx, int* esi, 
 
 void track_save_reset_scenery();
 void track_save_select_nearby_scenery(int rideIndex);
+
+rct_preview_track *get_track_def_from_ride(rct_ride *ride, int trackType);
+rct_preview_track *get_track_def_from_ride_index(int rideIndex, int trackType);
 
 #endif

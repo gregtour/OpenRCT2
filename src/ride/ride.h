@@ -923,4 +923,6 @@ void ride_get_entrance_or_exit_position_from_screen_position(int x, int y, int *
 bool ride_select_backwards_from_front();
 bool ride_select_forwards_from_back();
 
+money32 ride_remove_track_piece(int x, int y, int z, int direction, int type);
+
 #endif

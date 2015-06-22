@@ -3425,3 +3425,15 @@ static void track_save_add_map_element(int mapElementSelectType, int x, int y, r
 {
 	RCT2_CALLPROC_X(0x006D2B3C, x, mapElementSelectType, y, (int)mapElement, 0, 0, 0);
 }
+
+rct_preview_track *get_track_def_from_ride(rct_ride *ride, int trackType)
+{
+	return ride_type_has_flag(ride->type, RIDE_TYPE_FLAG_FLAT_RIDE) ?
+		RCT2_ADDRESS(0x00994A38, rct_preview_track*)[trackType] :
+		RCT2_ADDRESS(0x00994638, rct_preview_track*)[trackType];
+}
+
+rct_preview_track *get_track_def_from_ride_index(int rideIndex, int trackType)
+{
+	return get_track_def_from_ride(GET_RIDE(rideIndex), trackType);
+}

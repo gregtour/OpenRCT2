@@ -836,12 +836,7 @@ int sub_6C683D(int* x, int* y, int* z, int direction, int type, uint16 extra_par
 		return 1;
 
 	// Possibly z should be & 0xF8
-	rct_ride *ride = GET_RIDE(mapElement->properties.track.ride_index);
-	rct_preview_track *trackBlock;
-
-	trackBlock = ride_type_has_flag(ride->type, RIDE_TYPE_FLAG_FLAT_RIDE) ?
-		RCT2_ADDRESS(0x00994A38, rct_preview_track*)[type] :
-		RCT2_ADDRESS(0x00994638, rct_preview_track*)[type];
+	rct_preview_track *trackBlock = get_track_def_from_ride_index(mapElement->properties.track.ride_index, type);
 
 	int sequence = mapElement->properties.track.sequence & 0x0F;
 	uint8 mapDirection = mapElement->type & MAP_ELEMENT_DIRECTION_MASK;
@@ -920,18 +915,19 @@ int sub_6C683D(int* x, int* y, int* z, int direction, int type, uint16 extra_par
 			*output_element = mapElement;
 		}
 		if (flags & (1 << 0)) {
-			// Quadrant related ??
-			mapElement->type &= ~(1 << 6);
+			// Switch highlight off
+			mapElement->type &= ~MAP_ELEMENT_TYPE_FLAG_HIGHLIGHT;
 		}
 		if (flags & (1 << 1)) {
-			// Quadrant related ??
-			mapElement->type |= (1 << 6);
+			// Switch highlight on
+			mapElement->type |= MAP_ELEMENT_TYPE_FLAG_HIGHLIGHT;
 		}
 		if (flags & (1 << 2)) {
 			mapElement->properties.track.colour &= 0xFC;
 			mapElement->properties.track.colour |= extra_params & 0xFF;
 		}
 		if (flags & (1 << 5)) {
+			// Seat rotation
 			mapElement->properties.track.colour &= 0x0F;
 			mapElement->properties.track.colour |= (extra_params & 0xFF) << 4;
 		}
@@ -4797,4 +4793,10 @@ bool ride_select_forwards_from_back()
 	} else {
 		return false;
 	}
+}
+
+money32 ride_remove_track_piece(int x, int y, int z, int direction, int type)
+{
+	RCT2_GLOBAL(RCT2_ADDRESS_GAME_COMMAND_ERROR_TITLE, rct_string_id) = STR_RIDE_CONSTRUCTION_CANT_REMOVE_THIS;
+	return game_do_command(x, (GAME_COMMAND_FLAG_APPLY) | ((direction & 3) << 8), y, type, GAME_COMMAND_4, z, 0);
 }
